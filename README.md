@@ -22,3 +22,5 @@ Como output tenemos *2020_immuno_articles.csv* que contiene los articulos sacado
 ## Licencia
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
+Usamos la licencia MIT ya que el data viene de un sitio publico y nosotros no tenemos ningun tipo de ownership. Consideramos que el codigo que hemos escrito no es nada groundbreaking para que este bajo una licencia protectora, no obstante si hay algun bug, no somos responsables de las consequencias.
