@@ -5,7 +5,7 @@ Este repositorio contiene la PRA1 de web-scraping. La practica se ha basade en s
 
 A partir de los articulos, recogemos el titulo, resumen, autores, accesibilidad, fecha, link al titulo entero o abstract y la imagen representativa del estudio. Tambien para poder seleccionar solamente articulos de interes hemos añadido una lista de keywords a partir de la cual añadimos un Boolean si esta el keyword en el abstract del paper o no. Esto nos permitira hacer una limpiaza del dataset mas adelante. 
 
-El inetes de esta dataset es la posibilidad de generar y seleccionar articulso de Nature que nos interesan sin tener que leer miles de abstracts manualmente. Es una buena manera de automatizar y facilitar la vida a los investigadores para que puedan seguir aprendiendo sin tener que perder tiempo en la lectura de cientos de papers.
+El inetes de esta dataset es la posibilidad de generar y seleccionar articulos de Nature que nos interesan sin tener que leer miles de abstracts manualmente. Es una buena manera de automatizar y facilitar la vida a los investigadores para que puedan seguir aprendiendo sin tener que perder tiempo en la lectura de cientos de papers.
 
 ## Uso 
 
