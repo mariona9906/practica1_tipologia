@@ -5,17 +5,21 @@ import time
 import random
 from fp.fp import FreeProxy
 
+start_year=2017
+end_year=2022
+
+
 start=time.time()
 
 headers = {"User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:106.0) Gecko/20100101 Firefox/106.0"}
-keywords=["TCR","BCR","T CELL","B CELL","NKC","CD4","CD8","DEEP LEARNING","MACHINE LEARNING","HLA"]
+keywords=["TCR","BCR","T CELL","B CELL","NKC","CD4","CD8","DEEP LEARNING","MACHINE LEARNING","ML","DL","CNN","LSTM","HLA"]
 base_url="https://www.nature.com"
 header_df=["Article","Summary","Authors","Date","Access","Figure","Link paper",
-          "TCR","BCR","T CELL","B CELL","NKC","CD4","CD8","DEEP LEARNING","MACHINE LEARNING","HLA"]
+          "TCR","BCR","T CELL","B CELL","NKC","CD4","CD8","DEEP LEARNING","MACHINE LEARNING","ML","DL","CNN","LSTM","HLA"]
 print("Selected keywords are:",*keywords)
 
 proxies={}
-for i in range(20):#obtain proxies to access nature.com so we don't get bloked
+for i in range(50):#obtain proxies to access nature.com so we don't get bloked
     proxy = FreeProxy(timeout=1,anonym=True,rand=True).get()
     proxies[i]=proxy
 
@@ -57,12 +61,15 @@ def get_articles(soup,url): #loop through the table to get articles on the webpa
         article = art.find("h3", class_="c-card__title")
         summmary = art.find("div", class_="c-card__summary u-mb-16 u-hide-sm-max")
         authors = art.find("ul", class_="c-author-list c-author-list--compact c-author-list--truncated")
+        if authors==None:
+            authors = art.find("ul", class_="c-author-list c-author-list--compact")            
         date_in=art.find("div", class_="c-card__section c-meta")
         date,access=process_date(date_in)
         pic=art.find("img")#,src="c-card__image")
         link_art=art.find("a",class_="c-card__link u-link-inherit")
         link_art=base_url+str(link_art.attrs["href"])
         keywords_art=process_abstract(link_art,keywords)
+        #print(article.text.strip())
         row_data=[article.text.strip(),summmary.text.strip(),
                   authors.text.strip(),date,access,
                   "https:"+pic.attrs["src"],link_art]
@@ -72,26 +79,28 @@ def get_articles(soup,url): #loop through the table to get articles on the webpa
     return all_arts
     
     
-n=True
-p=1
+
 max_p=100 #define max iter so we don't loop forever in case error is not 404 
 rows_df=[header_df]# add header to the future df
 
-while n:
-    sleep=random.randint(1,5)
-    time.sleep(sleep)
-    URL="https://www.nature.com/ni/research-articles?searchType=journalSearch&sort=PubDate&type=article&year=2022&page="+str(p)#loop over pages 
-    page,soup=cook_soup(URL)
-    print(p,page.status_code)# check if page is not a 404 Not Found
-    
-    p+=1
-    
-    if p>max_p or page.status_code==404: # if the webapge is Not Found we stop iterating since we reached the end of possible pages 
-        n=False
-        break
-    article_list=get_articles(soup,URL)
-    rows_df.extend(article_list)
-    
+
+for i in range(start_year,end_year+1,1):
+    n=True
+    p=1
+    while n:
+        sleep=random.randint(0,0)
+        time.sleep(sleep)
+        URL="https://www.nature.com/ni/research-articles?searchType=journalSearch&sort=PubDate&type=article&year="+str(i)+"&page="+str(p)#loop over pages and years 
+        page,soup=cook_soup(URL)
+        print(p,page.status_code)# check if page is not a 404 Not Found
+        if p>max_p or page.status_code==404: # if the webapge is Not Found we stop iterating since we reached the end of possible pages 
+            n=False
+            
+        else:
+            time.sleep(sleep)
+            article_list=get_articles(soup,URL)
+            rows_df.extend(article_list)
+            p+=1
 #maybe implement asynch io (multi threading)
 #not javascript page so no selenium 
 # quite simple web page and open access area of nature, so no hard blockers were identified
